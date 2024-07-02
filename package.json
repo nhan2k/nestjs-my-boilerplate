@@ -21,6 +21,7 @@
     "docker": "docker-compose up -d"
   },
   "dependencies": {
+    "@casl/ability": "^6.7.1",
     "@nestjs/axios": "^3.0.2",
     "@nestjs/bull": "^10.1.1",
     "@nestjs/cache-manager": "^2.2.2",

@@ -21,11 +21,12 @@ import { UpdateCatDto } from './dto/update-cat.dto';
 import { HttpExceptionFilter } from 'src/shared/exception-filters/http-exception.filter';
 import { ZodValidationPipe } from 'src/shared/pipes/zod-validation.pipe';
 import { createCatSchema } from './schemas/cats.validation';
-import { Roles } from 'src/shared/decorators/roles.decorator';
-import { RolesGuard } from 'src/shared/guards/role.guard';
 import { Role } from 'src/shared/enums/role.enum';
 import { CacheService } from 'src/core/configs/cache/cache.service';
 import { Request, Response } from 'express';
+import { PoliciesGuard } from 'src/shared/guards/policies.guard';
+import { CheckPolicies } from 'src/shared/casl/check-policies';
+import { Action, AppAbility, User } from 'src/shared/casl/casl-ability.factory';
 
 @Controller('cats')
 export class CatsController {
@@ -39,14 +40,14 @@ export class CatsController {
   @Post()
   @UseFilters(new HttpExceptionFilter())
   @UsePipes(new ZodValidationPipe(createCatSchema))
-  @Roles([Role.Admin])
-  @UseGuards(RolesGuard)
   create(@Body() createCatDto: CreateCatDto) {
     this._logger.log(`TRIGGER!`);
     return this.catsService.create(createCatDto);
   }
 
   @Get()
+  @UseGuards(PoliciesGuard)
+  @CheckPolicies((ability: AppAbility) => ability.can(Action.Read, User))
   async findAll(
     @Req() request: Request,
     @Res({ passthrough: true }) response: Response,
