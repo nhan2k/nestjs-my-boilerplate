@@ -4,6 +4,5 @@ import { OrdersEventService } from './orders.service';
 
 @Module({
   providers: [OrderCreatedListener, OrdersEventService],
-  exports: [OrdersEventService],
 })
 export class OrdersEventModule {}

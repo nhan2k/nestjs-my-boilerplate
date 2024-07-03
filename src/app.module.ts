@@ -11,53 +11,44 @@ import { LoggerMiddleware } from './shared/middlewares/logger.middleware';
 import { FeaturesModule } from './features/features.module';
 import { SharedModule } from './shared/shared.module';
 import { MulterModule } from '@nestjs/platform-express';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { diskStorage } from 'multer';
-import { extname, join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
-import { HttpModule } from '@nestjs/axios';
+import { CaslAbilityFactory } from './shared/casl/casl-ability.factory';
+import { CsrfService } from './shared/csrf/csrf.service';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
+import { CsrfInterceptor } from './shared/interceptors/csrf.interceptor';
+import { CsrfMiddleware } from './shared/middlewares/csrf.middleware';
+import { multerOption } from './core/configs/multer/multer.config';
+import { serveStaticOption } from './core/configs/serve-static/serve-static.config';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { throttleOption } from './core/configs/throttle/throttle.config';
 
 @Module({
   imports: [
     CoreModule,
     FeaturesModule,
     SharedModule,
-    MulterModule.registerAsync({
-      imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        dest: configService.get<string>('MULTER_DEST'),
-        storage: diskStorage({
-          destination: configService.get<string>('MULTER_DEST'),
-          filename: (req, file, callback) => {
-            const uniqueSuffix =
-              Date.now() + '-' + Math.round(Math.random() * 1e9);
-            const ext = extname(file.originalname);
-            const filename = `${file.originalname.slice(0, 5)}${uniqueSuffix}${ext}`;
-            callback(null, filename);
-          },
-        }),
-      }),
-      inject: [ConfigService],
-    }),
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'uploads'),
-      serveRoot: '/uploads', // This sets the URL prefix for serving static files
-    }),
-    HttpModule.registerAsync({
-      imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        timeout: configService.get('HTTP_TIMEOUT'),
-        maxRedirects: configService.get('HTTP_MAX_REDIRECTS'),
-      }),
-      inject: [ConfigService],
-    }),
+    MulterModule.registerAsync(multerOption),
+    ServeStaticModule.forRoot(serveStaticOption),
+    ThrottlerModule.forRootAsync(throttleOption),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    CaslAbilityFactory,
+    CsrfService,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: CsrfInterceptor,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+  ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LoggerMiddleware).forRoutes({
+    consumer.apply(LoggerMiddleware, CsrfMiddleware).forRoutes({
       path: '*',
       method: RequestMethod.ALL,
     });

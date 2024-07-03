@@ -19,6 +19,5 @@ import { LoggingInterceptor } from 'src/shared/interceptors/logging.interceptor'
       useClass: LoggingInterceptor,
     },
   ],
-  exports: [],
 })
 export class WinstonLoggerModule {}

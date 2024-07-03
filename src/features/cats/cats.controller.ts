@@ -53,7 +53,6 @@ export class CatsController {
     @Res({ passthrough: true }) response: Response,
   ) {
     this._logger.log('request?.cookies ' + request.cookies['key']); // or "request.cookies['cookieKey']"
-    // or console.log(request.signedCookies);
 
     this._logger.log(`TRIGGER!`);
     return this.catsService.findAll();

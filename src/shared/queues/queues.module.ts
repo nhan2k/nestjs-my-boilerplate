@@ -17,6 +17,5 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       inject: [ConfigService],
     }),
   ],
-  exports: [AudioModule],
 })
 export class QueuesModule {}

@@ -13,6 +13,9 @@ import {
   UploadedFile,
   UseInterceptors,
   Response as NestResponse,
+  Body,
+  Logger,
+  UseGuards,
 } from '@nestjs/common';
 import { AppService } from './app.service';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -20,18 +23,21 @@ import { createReadStream, readFileSync } from 'fs';
 import { join } from 'path';
 import { Response } from 'express';
 import { Observable, map, of } from 'rxjs';
+import { CsrfInterceptor } from './shared/interceptors/csrf.interceptor';
+import { Throttle } from '@nestjs/throttler';
+import { ConfigService } from '@nestjs/config';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  private readonly _logger = new Logger(AppController.name);
+  constructor(
+    private readonly appService: AppService,
+    private readonly configService: ConfigService,
+  ) {}
 
   @Get()
   async getHello(@Session() session: Record<string, any>): Promise<any> {
     session.visits = session.visits ? session.visits + 1 : 1;
-    console.log(
-      '🚀 ~ AppController ~ getHello ~ session.visits:',
-      session.visits,
-    );
     return await this.appService.getHello();
   }
 
@@ -44,9 +50,7 @@ export class AppController {
       }),
     )
     file: Express.Multer.File,
-  ) {
-    console.log(file);
-  }
+  ) {}
 
   @Get('file/:name')
   @Header('Content-Type', 'image/jpeg')
@@ -84,5 +88,17 @@ export class AppController {
     return of([1, 2]).pipe(
       map((_) => ({ data: { hello: id } }) as MessageEvent),
     );
+  }
+
+  @Throttle({ default: { limit: 3, ttl: 60000 } })
+  @Get('csrf-token')
+  getCsrfToken(@Res({ passthrough: true }) res: Response) {
+    return { csrfToken: res.locals.csrfToken };
+  }
+
+  @Post('protected')
+  @UseInterceptors(CsrfInterceptor)
+  protectedRoute(@Body() body: any) {
+    return { message: 'Protected route accessed', body };
   }
 }

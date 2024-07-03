@@ -7,10 +7,11 @@ import { GlobalGuard } from './shared/guards/global.guard';
 import { VERSION_NEUTRAL, VersioningType } from '@nestjs/common';
 import { winstonConfig } from './core/winston/logger';
 import { WinstonModule } from 'nest-winston';
-import * as cookieParser from 'cookie-parser';
-import * as compression from 'compression';
-import * as session from 'express-session';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import helmet from 'helmet';
+import cookieParser from 'cookie-parser';
+import compression from 'compression';
+import session from 'express-session';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
@@ -30,7 +31,7 @@ async function bootstrap() {
   });
   app.setGlobalPrefix('api');
   app.enableCors({
-    origin: '*',
+    origin: ['*'],
   });
 
   app.use(cookieParser());
@@ -54,6 +55,7 @@ async function bootstrap() {
     }
   }
   app.use(session(sess));
+  app.use(helmet());
 
   await app.listen(process.env.PORT || 3000);
 }

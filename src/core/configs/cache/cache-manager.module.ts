@@ -19,6 +19,5 @@ const RedisFactoryModule = CacheModule.registerAsync({
 @Module({
   imports: [RedisFactoryModule],
   providers: [CacheService],
-  exports: [CacheManagerModule],
 })
 export class CacheManagerModule {}
