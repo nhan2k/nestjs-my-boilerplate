@@ -1,0 +1,39 @@
+language: node_js
+node_js:
+  - "20.15.0"
+
+cache:
+  directories:
+    - "$HOME/.pnpm-store"
+    - "node_modules"
+
+before_install:
+  - npm install -g pnpm
+
+install:
+  - pnpm install
+
+script:
+  - pnpm run build
+  - pnpm run test
+
+jobs:
+  include:
+    - stage: test
+      script: pnpm run test:ci
+    - stage: build
+      script: pnpm run build:ci
+    - stage: lint
+      script: pnpm run lint
+
+stages:
+  - test
+  - build
+  - lint
+
+notifications:
+  email:
+    recipients:
+      - nhanrooney113@gmail.com.com
+    on_success: always
+    on_failure: always
