@@ -21,7 +21,6 @@ import { UpdateCatDto } from './dto/update-cat.dto';
 import { HttpExceptionFilter } from 'src/shared/exception-filters/http-exception.filter';
 import { ZodValidationPipe } from 'src/shared/pipes/zod-validation.pipe';
 import { createCatSchema } from './schemas/cats.validation';
-import { Role } from 'src/shared/enums/role.enum';
 import { CacheService } from 'src/core/configs/cache/cache.service';
 import { Request, Response } from 'express';
 import { PoliciesGuard } from 'src/shared/guards/policies.guard';

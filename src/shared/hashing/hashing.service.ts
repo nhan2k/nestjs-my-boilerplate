@@ -7,7 +7,7 @@ export class HashingService {
   saltOrRounds: string | number;
   constructor(private readonly configService: ConfigService) {
     this.saltOrRounds =
-      this.configService.get<string | number>('SALT_OR_ROUNDS') || 10;
+      this.configService.get<string | number>('SALT_OR_ROUNDS') ?? 10;
   }
 
   async hashing(text: string): Promise<string> {

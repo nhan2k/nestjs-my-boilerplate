@@ -1,0 +1,6 @@
+{
+  "sonarlint.connectedMode.project": {
+    "connectionId": "nhan2k",
+    "projectKey": "nhan2k_nestjs-my-boilerplate"
+  }
+}

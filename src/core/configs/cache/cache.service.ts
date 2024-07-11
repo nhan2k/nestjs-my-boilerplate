@@ -34,7 +34,7 @@ export class CacheService {
       const jsonData: string | undefined = await this.cacheManager.get<string>(
         `${this.configService.get<string>('CACHE_GLOBAL_KEY')}::${key}`,
       );
-      return jsonData ? JSON.parse(jsonData!) : undefined;
+      return jsonData ? JSON.parse(jsonData) : undefined;
     } catch (error) {
       throw new BadRequestException();
     }

@@ -15,7 +15,6 @@ import {
   Response as NestResponse,
   Body,
   Logger,
-  UseGuards,
 } from '@nestjs/common';
 import { AppService } from './app.service';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -50,7 +49,9 @@ export class AppController {
       }),
     )
     file: Express.Multer.File,
-  ) {}
+  ) {
+    return;
+  }
 
   @Get('file/:name')
   @Header('Content-Type', 'image/jpeg')

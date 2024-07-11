@@ -7,7 +7,7 @@ import * as Joi from 'joi';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: `.env.${process.env.NODE_ENV || 'development'}`,
+      envFilePath: `.env.${process.env.NODE_ENV ?? 'development'}`,
       load: [configuration],
       cache: true,
       validationSchema: Joi.object({

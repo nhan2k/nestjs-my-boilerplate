@@ -12,7 +12,10 @@ export class UserService {
     private usersRepository: Repository<User>,
     private dataSource: DataSource,
   ) {}
-  private readonly users = [];
+  private readonly users: {
+    username: string;
+    password: string;
+  }[] = [];
   async findAll(): Promise<UserEntity[]> {
     const test = new UserEntity({
       id: 1,
@@ -28,7 +31,13 @@ export class UserService {
     return this.usersRepository.findOneBy({ id });
   }
 
-  async findOneByUsername(username: string): Promise<any | undefined> {
+  async findOneByUsername(username: string): Promise<
+    | {
+        username: string;
+        password: string;
+      }
+    | undefined
+  > {
     return this.users.find((user) => user.username === username);
   }
 

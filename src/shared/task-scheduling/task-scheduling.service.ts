@@ -15,9 +15,6 @@ export class TaskSchedulingService {
     start?: boolean | null | undefined,
     timeZone?: string | undefined,
     context?: null | undefined,
-    runOnInit?: boolean | undefined,
-    utcOffset?: null | undefined,
-    unrefTimeout?: boolean | undefined,
   ): void {
     const job = new CronJob(
       cronTime,
@@ -26,9 +23,6 @@ export class TaskSchedulingService {
       start,
       timeZone,
       context,
-      runOnInit,
-      utcOffset,
-      unrefTimeout,
     );
 
     this.schedulerRegistry.addCronJob(name, job);

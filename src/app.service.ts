@@ -14,7 +14,7 @@ export class AppService {
       this.httpService.get<Cat[]>('http://localhost:3000/api/cats').pipe(
         catchError((error: AxiosError) => {
           this.logger.error(error.message);
-          throw 'An error happened!';
+          throw new Error('An error happened!' + 404);
         }),
       ),
     );

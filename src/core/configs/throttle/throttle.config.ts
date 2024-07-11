@@ -11,9 +11,9 @@ export const throttleOption: ThrottlerAsyncOptions = {
         ttl:
           seconds(
             config.get<string>('THROTTLE_TTL_SHORT') as unknown as number,
-          ) || seconds(1),
+          ) ?? seconds(1),
         limit:
-          (config.get<string>('THROTTLE_LIMIT_SHORT') as unknown as number) ||
+          (config.get<string>('THROTTLE_LIMIT_SHORT') as unknown as number) ??
           3,
       },
     ],

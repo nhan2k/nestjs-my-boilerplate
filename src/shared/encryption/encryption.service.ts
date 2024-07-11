@@ -9,10 +9,10 @@ export class EncryptionService {
   iv: Buffer;
   textToEncrypt: string;
   constructor(private readonly configService: ConfigService) {
-    const size = parseInt(this.configService.get('SIZE_RANDOM_BYTES') || '16');
+    const size = parseInt(this.configService.get('SIZE_RANDOM_BYTES') ?? '16');
     this.iv = randomBytes(size);
     this.textToEncrypt =
-      this.configService.get<string>('TEXT_TO_ENCRYPT') || '';
+      this.configService.get<string>('TEXT_TO_ENCRYPT') ?? '';
   }
 
   async encrypt(text: string): Promise<{
