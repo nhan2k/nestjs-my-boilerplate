@@ -45,7 +45,7 @@ async function bootstrap() {
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: false,
+      secure: true,
     },
   };
   if (process.env.NODE_ENV === 'production') {

@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { createCipheriv, createDecipheriv, randomBytes, scrypt } from 'crypto';
 import { promisify } from 'util';
+import { algorithm } from './constants';
 
 @Injectable()
 export class EncryptionService {
@@ -21,7 +22,7 @@ export class EncryptionService {
     // The key length is dependent on the algorithm.
     // In this case for aes256, it is 32 bytes.
     const key = (await promisify(scrypt)(text, 'salt', 32)) as Buffer;
-    const cipher = createCipheriv('aes-256-ctr', key, this.iv);
+    const cipher = createCipheriv(algorithm, key, this.iv);
     const encryptedText = Buffer.concat([
       cipher.update(this.textToEncrypt),
       cipher.final(),
@@ -33,7 +34,7 @@ export class EncryptionService {
   }
 
   async decypt(key: Buffer): Promise<Buffer> {
-    const decipher = createDecipheriv('aes-256-ctr', key, this.iv);
+    const decipher = createDecipheriv(algorithm, key, this.iv);
     return Buffer.concat([
       decipher.update(Buffer.from(this.textToEncrypt)),
       decipher.final(),

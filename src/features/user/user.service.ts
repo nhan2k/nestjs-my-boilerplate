@@ -12,18 +12,7 @@ export class UserService {
     private usersRepository: Repository<User>,
     private dataSource: DataSource,
   ) {}
-  private readonly users = [
-    {
-      userId: 1,
-      username: 'john',
-      password: 'changeme',
-    },
-    {
-      userId: 2,
-      username: 'maria',
-      password: 'guess',
-    },
-  ];
+  private readonly users = [];
   async findAll(): Promise<UserEntity[]> {
     const test = new UserEntity({
       id: 1,
