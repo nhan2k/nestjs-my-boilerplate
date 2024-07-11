@@ -4,6 +4,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { User, UserEntity } from './entities/user.entity';
 import { DataSource, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class UserService {
@@ -11,6 +12,7 @@ export class UserService {
     @InjectRepository(User)
     private usersRepository: Repository<User>,
     private dataSource: DataSource,
+    private readonly configService: ConfigService,
   ) {}
   private readonly users: {
     username: string;
@@ -21,7 +23,7 @@ export class UserService {
       id: 1,
       firstName: 'Kamil',
       lastName: 'Mysliwiec',
-      password: 'password',
+      password: this.configService.get<string>('PASSWORD_FIELD'),
       isActive: true,
     });
     return [test];
