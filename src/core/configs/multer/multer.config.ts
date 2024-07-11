@@ -8,6 +8,9 @@ export const multerOption: MulterModuleAsyncOptions = {
   imports: [ConfigModule],
   useFactory: async (configService: ConfigService) => ({
     dest: configService.get<string>('MULTER_DEST'),
+    limits: {
+      fileSize: 8000000,
+    },
     storage: diskStorage({
       destination: configService.get<string>('MULTER_DEST'),
       filename: (req, file, callback) => {
@@ -17,9 +20,6 @@ export const multerOption: MulterModuleAsyncOptions = {
         callback(null, filename);
       },
     }),
-    limits: {
-      fileSize: 8000000,
-    },
   }),
   inject: [ConfigService],
 };
