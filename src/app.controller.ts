@@ -7,7 +7,6 @@ import {
   ParseFilePipeBuilder,
   Post,
   Res,
-  Session,
   Sse,
   StreamableFile,
   UploadedFile,
@@ -24,19 +23,14 @@ import { Response } from 'express';
 import { Observable, map, of } from 'rxjs';
 import { CsrfInterceptor } from './shared/interceptors/csrf.interceptor';
 import { Throttle } from '@nestjs/throttler';
-import { ConfigService } from '@nestjs/config';
 
 @Controller()
 export class AppController {
   private readonly _logger = new Logger(AppController.name);
-  constructor(
-    private readonly appService: AppService,
-    private readonly configService: ConfigService,
-  ) {}
+  constructor(private readonly appService: AppService) {}
 
   @Get()
-  async getHello(@Session() session: Record<string, any>): Promise<any> {
-    session.visits = session.visits ? session.visits + 1 : 1;
+  async getHello(): Promise<any> {
     return await this.appService.getHello();
   }
 
