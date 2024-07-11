@@ -13,7 +13,6 @@ export class GlobalGuard implements CanActivate {
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
     this._logger.log(`TRIGGER!`);
-    const request = context.switchToHttp().getRequest(); // Compliant: no unnecessary assignment
     return true;
   }
 }
