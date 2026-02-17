@@ -22,7 +22,7 @@
     "compodoc": "pnpx @compodoc/compodoc -p tsconfig.json -s"
   },
   "dependencies": {
-    "@casl/ability": "^6.7.1",
+    "@casl/ability": "^6.7.5",
     "@nestjs/axios": "^3.0.2",
     "@nestjs/bull": "^10.1.1",
     "@nestjs/cache-manager": "^2.2.2",
@@ -33,7 +33,7 @@
     "@nestjs/jwt": "^10.2.0",
     "@nestjs/mapped-types": "^2.0.5",
     "@nestjs/passport": "^10.0.3",
-    "@nestjs/platform-express": "^10.3.9",
+    "@nestjs/platform-express": "^10.4.22",
     "@nestjs/schedule": "^4.0.2",
     "@nestjs/serve-static": "^4.0.2",
     "@nestjs/throttler": "^5.2.0",
